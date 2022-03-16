@@ -79,7 +79,7 @@ void update_cpus_state(std::vector<proc_data>& proc_list, std::vector<int>& cpus
         }
     }
     /* sort processes on CPUS from lower to higher, negative numbers pushed at the end (-1 -> CPU sleep) */
-    std::sort(cpus_state.begin(), cpus_state.end(), [](int i, int j){return (i >= 0 && j >= 0) ? i < j : i > j;});
+    std::stable_sort(cpus_state.begin(), cpus_state.end(), [](int i, int j){return (i >= 0 && j >= 0) ? i < j : i > j;});
 }
 
 /*! First Come First Serve scheduling algorithm */
@@ -101,7 +101,7 @@ void sjf(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state)
             if(cpu_state == proc.id) proc_it++;
     }
     /* sort remaining processes in terms of execution time */
-    std::sort (proc_it, proc_list.end(), proc_data::compare_exec_time);
+    std::stable_sort (proc_it, proc_list.end(), proc_data::compare_exec_time);
     update_cpus_state(proc_list, cpus_state);
 }
 
@@ -109,7 +109,7 @@ void sjf(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state)
 void srtf(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state)
 {
     /* sort processes in terms of execution time */
-    std::sort (proc_list.begin(), proc_list.end(), proc_data::compare_remaining_time);
+    std::stable_sort (proc_list.begin(), proc_list.end(), proc_data::compare_remaining_time);
     update_cpus_state(proc_list, cpus_state);
 }
 
@@ -140,7 +140,7 @@ void rr(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state, unsigne
 void prio_fcfs(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state)
 {
     /* sort processes in terms of priority, same priorities are already sorted */
-    std::sort (proc_list.begin(), proc_list.end(), proc_data::compare_priority);
+    std::stable_sort (proc_list.begin(), proc_list.end(), proc_data::compare_priority);
     update_cpus_state(proc_list, cpus_state);
 }
 
@@ -148,9 +148,9 @@ void prio_fcfs(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state)
 void prio_srtf(std::vector<proc_data>& proc_list, std::vector<int>& cpus_state)
 {
     /* sort processes in terms of remaining execution time (same priority) */
-    std::sort (proc_list.begin(), proc_list.end(), proc_data::compare_remaining_time);
+    std::stable_sort (proc_list.begin(), proc_list.end(), proc_data::compare_remaining_time);
     /* sort processes in terms of priority */
-    std::sort (proc_list.begin(), proc_list.end(), proc_data::compare_priority);
+    std::stable_sort (proc_list.begin(), proc_list.end(), proc_data::compare_priority);
     update_cpus_state(proc_list, cpus_state);
 }
 
@@ -166,7 +166,7 @@ void prio_fcfs_no_preemption(std::vector<proc_data>& proc_list, std::vector<int>
             if(cpu_state == proc.id) proc_it++;
     }
     /* sort processes in terms of priority, same priorities are already sorted */
-    std::sort (proc_it, proc_list.end(), proc_data::compare_priority);
+    std::stable_sort (proc_it, proc_list.end(), proc_data::compare_priority);
     update_cpus_state(proc_list, cpus_state);
 }
 
